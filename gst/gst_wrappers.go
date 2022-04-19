@@ -226,14 +226,6 @@ func registerMarshalers() {
 			T: TypeIntRange,
 			F: marshalIntRange,
 		},
-		{
-			T: TypeValueArray,
-			F: marshalValueArray,
-		},
-		{
-			T: TypeValueList,
-			F: marshalValueList,
-		},
 	}
 
 	glib.RegisterGValueMarshalers(tm)
@@ -241,18 +233,6 @@ func registerMarshalers() {
 
 func toGValue(p uintptr) *C.GValue {
 	return (*C.GValue)((unsafe.Pointer)(p))
-}
-
-func marshalValueArray(p uintptr) (interface{}, error) {
-	val := toGValue(p)
-	out := ValueArrayValue(*glib.ValueFromNative(unsafe.Pointer(val)))
-	return &out, nil
-}
-
-func marshalValueList(p uintptr) (interface{}, error) {
-	val := glib.ValueFromNative(unsafe.Pointer(toGValue(p)))
-	out := ValueListValue(*glib.ValueFromNative(unsafe.Pointer(val)))
-	return &out, nil
 }
 
 func marshalInt64Range(p uintptr) (interface{}, error) {
