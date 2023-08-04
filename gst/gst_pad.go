@@ -1068,6 +1068,10 @@ type PadProbeInfo struct {
 	ptr *C.GstPadProbeInfo
 }
 
+func (p *PadProbeInfo) Ptr() *C.GstPadProbeInfo {
+	return p.ptr
+}
+
 // ID returns the id of the probe.
 func (p *PadProbeInfo) ID() uint32 { return uint32(p.ptr.id) }
 
