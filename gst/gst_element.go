@@ -519,3 +519,15 @@ func (e *Element) GetRequestPad(name string) *Pad {
 func (e *Element) ReleaseRequestPad(pad *Pad) {
        C.gst_element_release_request_pad(e.Instance(), pad.Instance())
 }
+
+// this prevents go pointers in cgo when setting a gst.Element to a property
+// see (https://github.com/go-gst/go-gst/issues/65)
+// ToGValue implements glib.ValueTransformer.
+func (e *Element) ToGValue() (*glib.Value, error) {
+	val, err := glib.ValueInit(glib.Type(C.GST_TYPE_ELEMENT))
+	if err != nil {
+		return nil, err
+	}
+	val.SetInstance(unsafe.Pointer(e.Instance()))
+	return val, nil
+}
